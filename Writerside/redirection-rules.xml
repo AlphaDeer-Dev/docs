@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE rules SYSTEM "https://resources.jetbrains.com/writerside/1.0/redirection-rules.dtd">
+<rules>
+    <!-- format is as follows
+    <rule id="<unique id>">
+        <accepts>page.html</accepts>
+    </rule>
+    -->
+    <rule id="35850aee">
+        <description>Created after removal of "About test" from test</description>
+        <accepts>starter-topic.html</accepts>
+    </rule>
+    <rule id="2a5c3442">
+        <description>Created after removal of "Backend Design" from test</description>
+        <accepts>Backend-Design.html</accepts>
+    </rule>
+    <rule id="4d06779a">
+        <description>Created after removal of "Backend" from test</description>
+        <accepts>Backend.html</accepts>
+    </rule>
+</rules>
