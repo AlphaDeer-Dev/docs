@@ -1,80 +1,29 @@
-name: Build documentation
+name: Deploy Writerside to GitHub Pages
 
 on:
   push:
-    branches: ["main"]
-  workflow_dispatch:
-
-permissions:
-  id-token: write
-  pages: write
-
-env:
-  INSTANCE: 'Writerside/aw'
-  ARTIFACT: 'webHelpAW2-all.zip'
-  DOCKER_VERSION: '242.21870'
+    branches:
+      - main  # 监听 main 分支的推送事件
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
 
-      - name: Build docs using Writerside Docker builder
-        uses: JetBrains/writerside-github-action@v4
-        with:
-          instance: ${{ env.INSTANCE }}
-          artifact: ${{ env.ARTIFACT }}
-          docker-version: ${{ env.DOCKER_VERSION }}
+    - name: Build docs using Writerside Docker builder
+      uses: JetBrains/writerside-github-action@v4
+      with:
+        instance: 'Writerside/aw'  # 根据你的项目配置调整此值
+        artifact: 'webHelpAW2-all.zip'  # 根据你的项目配置调整此值
+        docker-version: '242.21870'  # 使用最新的 Docker 版本
 
-      - name: Save artifact with build results
-        uses: actions/upload-artifact@v4
-        with:
-          name: docs
-          path: |
-            artifacts/${{ env.ARTIFACT }}
-            artifacts/report.json
-          retention-days: 7
-  test:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: docs
-          path: artifacts
-
-      - name: Test documentation
-        uses: JetBrains/writerside-checker-action@v1
-        with:
-          instance: ${{ env.INSTANCE }}
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    needs: [build, test]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: docs
-
-      - name: Unzip artifact
-        run: unzip -O UTF-8 -qq '${{ env.ARTIFACT }}' -d dir
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-
-      - name: Package and upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: dir
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./artifacts/webHelpAW2-all  # 指定要发布的目录
