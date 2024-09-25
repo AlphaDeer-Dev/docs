@@ -18,4 +18,8 @@
         <description>Created after removal of "Backend" from test</description>
         <accepts>Backend.html</accepts>
     </rule>
+    <rule id="6db757d5">
+        <description>Created after removal of "Designs" from AlphaDeer Website</description>
+        <accepts>Design.html</accepts>
+    </rule>
 </rules>
